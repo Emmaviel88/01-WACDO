@@ -62,7 +62,8 @@ const ajoutLigneCde = async (orderId, productId, quantityOrdered) => {
     }
     
 };
-// FOnction uniquement créée pour exécuter des tests simples d'addition, à supprimer par la suite
+
+// Fonction uniquement créée pour exécuter des tests simples d'addition, à supprimer par la suite
 const testsAdd = (x, y) => {
     return x + y;
 }

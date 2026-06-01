@@ -37,11 +37,23 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Une erreur s\'est produite ' + err });
 });
 
-connectDB(); // commenté pour les tests JEST
+if (process.env.NODE_ENV !== 'test') {
+    connectDB(); // Connexion à la base de données MongoDB uniquement si l'environnement n'est pas "test"
+} else {
+    console.log("Environnement de test détecté, connexion à la base de données MongoDB ignorée");
+}
 
 setupSwagger(app);
 
 // Start server
-app.listen(PORT, () => {
-    console.log(`Server écoute sur le port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//     console.log(`Server écoute sur le port ${PORT}`);
+// });
+
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(PORT, () => {
+        console.log(`Server écoute sur le port ${PORT}`);
+    });
+}
+
+module.exports = app;
