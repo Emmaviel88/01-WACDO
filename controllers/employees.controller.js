@@ -23,7 +23,7 @@ exports.createEmployee = async (req, res) => {
             return res.status(400).json({ message: 'Employé existe déjà, création impossible !' });
         }
         
-        // TODO : ajouter une validation plus poussée des données (complexité du mot de passe)   
+        // Évolutions possibles : ajouter une validation plus poussée des données (complexité du mot de passe)   
         // Utiliser la lib password-validator
 
         // Hash le mot de passe saisi

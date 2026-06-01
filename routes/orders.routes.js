@@ -10,7 +10,6 @@ const router = express.Router();
  *   description: Gestion des commandes
  */
 
-// Route de création d'une nouvelle commande (protégée par le middleware d'authentification qui vérifie que l'utilisateur est connecté et a le rôle de "ADMIN")
 /**
  * @swagger
  * /api/orders:
@@ -65,7 +64,6 @@ const router = express.Router();
  */
 router.post('/', auth, createOrder);
 
-// Route de modification du statut d'une commande
 /**
  * @swagger
  * /api/orders/updateStatus/{orderId}:
@@ -167,7 +165,6 @@ router.post('/', auth, createOrder);
  */
 router.put('/updateStatus/:orderId', auth, updateOrderStatus);
 
-// Route de modification du statut d'une commande
 /**
  * @swagger
  * /api/orders/list:
@@ -276,7 +273,6 @@ router.get('/list', getOrdersList);
  */
 router.post('/addLineToOrder/:orderId', auth, addLineToOrder);
 
-// Route de récupération des lignes d'une commande
 /**
  * @swagger
  * /api/orders/orderDetails/{orderId}:
@@ -334,6 +330,8 @@ router.post('/addLineToOrder/:orderId', auth, addLineToOrder);
  *                             type: string
  *                          quantity:
  *                             type: integer
+ *                          price:
+ *                             type: number
  *                     price:
  *                       type: number
  *       500: 
@@ -372,6 +370,15 @@ router.get('/orderDetails/:orderId', getOrderDetails);
  *               properties:
  *                 message:
  *                   type: string 
+ *       400:
+ *        description: Erreur ! Une ligne de commande ne peut être supprimée que si la commande est au statut PREPARING ou READY
+ *        content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               message:
+ *                 type: string
  *       404:
  *         description: Erreur ! Ligne de commande à supprimer non trouvée
  *         content:

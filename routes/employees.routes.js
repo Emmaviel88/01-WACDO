@@ -13,6 +13,40 @@ const router = express.Router();
 // Route de création d'un nouvel employé
 // Cette route est protégée par le middleware d'authentification qui vérifie que l'utilisateur est connecté et a le rôle d'administrateur 
 // avant de lui permettre de créer un nouvel employé (voir le middleware auth.js pour plus de détails)   
+/**
+ * @swagger
+ * /api/employees:
+ *   post:
+ *     summary: Création d'un nouvel employé (Seul un administrateur peut créer un nouvel employé)
+ *     tags: [Employees]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               login:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *                 format: password
+ *               role:
+ *                 type: string
+ *                 enum: ['ADMIN', 'RECEPTION', 'PREPARATION', 'DELIVERY', 'IDLE']
+ *     responses:
+ *       201:
+ *        description: Création réussie, retourne un objet avec les données du nouvel employé créé (sans le mot de passe !)
+ *       400:
+ *        description: Requête invalide, l'employé existe déjà ou données manquantes
+ *       401:
+ *        description: Requête invalide, il n'y a pas de token dans l'entête de la requête ou le token n'est pas valide
+ *       403:
+ *        description: Accès refusé, l'utilisateur connecté n'est pas autorisé à créer un employé
+ *       500:
+ *        description: Erreur serveur
+ *
+*/
 router.post('/', auth, createEmployee);
 
 // Route de login d'un employé

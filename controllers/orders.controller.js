@@ -266,7 +266,7 @@ exports.getOrderDetails = async (req, res) => {
             .populate('status')
             .populate('total')
             .populate('placeConsume')
-            .populate({ path: 'lines', populate: { path: 'productId', select: 'name' }, select: 'quantity' }); // Populate les lignes de commande avec les détails du produit (nom et quantité)
+            .populate({ path: 'lines', populate: { path: 'productId', select: 'name' }, select: 'quantity price' }); // Populate les lignes de commande avec les détails du produit (nom et quantité)
             // .sort({ createdAt: 1 }); // Trier les commandes par date de création (par défaut les plus anciennes en premier)
         // Vérifier si la commande existe
         if (!order) {
@@ -290,6 +290,13 @@ exports.deleteOrderLine = async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: 'Commande non trouvée' });
         }
+        // Vérifier le status de la commande : une ligne de commande ne peut être supprimée que si la commande est au statut "PREPARING" ou "READY" 
+        // (la commande est au statut "PENDING" à sa création, elle passe à "PREPARING" dès qu'une ligne de commande est ajoutée, 
+        // et elle passe à "READY" lorsque la préparation de la commande est terminée, donc tant que la commande n'est pas encore livrée, on peut supprimer une ligne de commande)
+        if (order.status !== 'PREPARING' && order.status !== 'READY') {
+            return res.status(400).json({ message: 'Une ligne de commande ne peut être supprimée que si la commande est au statut PREPARING ou READY' });
+        } 
+
         // Vérifier si la ligne de commande existe dans la commande
         const lineIndex = order.lines.findIndex(line => line.toString() === orderLineId);
         if (lineIndex === -1) {
@@ -300,15 +307,31 @@ exports.deleteOrderLine = async (req, res) => {
         if (!orderLine) {
             return res.status(404).json({ message: 'Ligne de commande non trouvée' });
         }
+        // Récupérer le produit pour mise à jour de son stock (suite à annulation de la ligne de commande)
+        const orderedProduct = await Product.findById(orderLine.productId);
+        if (!orderedProduct) {
+            throw new Error('Product not found');
+        }        
         // Supprimer la ligne de commande de la base de données
         const deletedLine = await OrderLine.findByIdAndDelete(orderLineId);
         if (!deletedLine) {
             return res.status(500).json({ message: 'Erreur lors de la suppression de la ligne de commande' });
         }
+        console.log(`${order.lines.length} Lignes avant suppression : ${order.lines}`);
+        console.log(`Stock du produit ${orderedProduct.name} avant mise à jour : ${orderedProduct.stock}`);
         // Supprimer la ligne de commande de la commande
         order.lines.splice(lineIndex, 1);
+        console.log(`${order.lines.length} Lignes après suppression : ${order.lines}`);
         // Soustraire le prix de la ligne de commande du total de la commande
+        console.log(`Total avant suppression : ${order.total}`);
+        console.log(`Prix de la ligne de commande à supprimer : ${orderLine.price}`);
         order.total -= orderLine.price;
+        console.log(`Total après suppression : ${order.total}`);
+        // Recalculer la quantité en stock du produit suite à l'annulation de la ligne de commande
+        orderedProduct.stock += orderLine.quantity;
+        console.log(`Stock du produit ${orderedProduct.name} après mise à jour : ${orderedProduct.stock}`);
+        // Met à jour la quantité en stock du produit dans la base de données
+        await orderedProduct.save();
         // Enregistrer les modifications de la commande dans la base de données
         const updatedOrder = await order.save();
         if (!updatedOrder) {

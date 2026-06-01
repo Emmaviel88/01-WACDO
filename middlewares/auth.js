@@ -8,7 +8,7 @@ const auth = (req, res, next) => {
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
-            erreur: 'Le header de la requête ne contient pas de token valide'
+            erreur: 'auth-L11 : Le header de la requête ne contient pas de token valide'
         });
     }
     // Récupérer le token après "Bearer ". 
