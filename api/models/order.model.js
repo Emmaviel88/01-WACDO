@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const orderLine = require('./orderLine.model'); // Import du modèle OrderLine pour les références
+const orderLine = require('./orderline.model'); // Import du modèle orderline pour les références
 
 const orderSchema = new mongoose.Schema({
     // customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true }, // Gestion client non demandé dans la description du projet

@@ -1,3 +1,4 @@
+const connectDB = require('../config/db');
 const mongoose = require('mongoose');
 const Employee = require('../models/employee.model');
 const bcrypt = require('bcryptjs');
@@ -16,7 +17,7 @@ exports.createEmployee = async (req, res) => {
         }
         // Récupère les données du corps de la requête
         const { login, password, role } = req.body;
-        
+        await connectDB(); // Assure que la connexion à la base de données est établie avant de continuer
         // Vérifie si l'employé à créer existe déjà
         const existingEmployee = await Employee.findOne({ login });
         if (existingEmployee) {
@@ -53,6 +54,7 @@ exports.loginEmployee = async (req, res) => {
         if (!login || !password) {
             return res.status(400).json({ message: 'Veuillez fournir un login et un mot de passe' });
         }
+        await connectDB(); // Assure que la connexion à la base de données est établie avant de continuer
         // Cherche l'employé par son login dans la BDD
         const existingEmployee = await Employee.findOne({ login });
         if (!existingEmployee) {
@@ -87,6 +89,7 @@ exports.editEmployee = async (req, res) => {
         }
         const { id } = req.params;
         const { login, password, role } = req.body;
+        await connectDB(); // Assure que la connexion à la base de données est établie avant de continuer
         // Vérifie si l'employé à modifier existe
         const existingEmployee = await Employee.findById(id);
         if (!existingEmployee) {
@@ -130,6 +133,7 @@ exports.deleteEmployee = async (req, res) => {
             return res.status(403).json({ message: 'L116 : Accès refusé, vous n\'êtes pas autorisé à supprimer un employé' });
         }
         const { id } = req.params;
+        await connectDB();
         // Vérifie si l'employé à supprimer existe
         const existingEmployee = await Employee.findById(id);
         if (!existingEmployee) {
@@ -147,6 +151,7 @@ exports.deleteEmployee = async (req, res) => {
 
 exports.listEmployees = async (req, res) => {
     try {
+        await connectDB(); // Assure que la connexion à la base de données est établie avant de continuer
         //const employees = await Employee.find().select('-password'); // Exclut le champ password de la liste des employés
         const employees = await Employee.find().select('-password'); // Exclut le champ password de la liste des employés
         console.log(`Liste des employés récupérée, contient ${employees.length} employés`);

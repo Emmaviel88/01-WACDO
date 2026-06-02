@@ -1,3 +1,4 @@
+const connectDB = require('../config/db');
 const mongoose = require('mongoose');
 const Menu = require('../models/menu.model');
 const Product = require('../models/product.model');
@@ -13,6 +14,7 @@ exports.createMenu = async (req, res) => {
         // }
 
         const { name, lines, price } = req.body;
+        await connectDB(); // Assurer la connexion à la base de données avant de créer le menu
         const menu = new Menu({ name: name, lines: lines, price: price });
         const savedMenu = await menu.save();
         res.status(201).json({message: 'Menu créé avec succès', menu: savedMenu});
@@ -33,6 +35,7 @@ exports.createMenuLine = async (req, res) => {
 
         const { menuId } = req.params;
         const { productId, quantity } = req.body;
+        await connectDB(); // Assurer la connexion à la base de données avant de créer la ligne de menu
         const menu = await Menu.findById(menuId);
         if (!menu) {
             return res.status(404).json({ message: 'Menu non trouvé' });
@@ -62,6 +65,7 @@ exports.deleteMenuLine = async (req, res) => {
         const { menuId } = req.params;
         const { productId } = req.body;
         console.log(`menuId: ${menuId}, productId: ${productId}`);
+        await connectDB(); // Assurer la connexion à la base de données avant de supprimer la ligne de menu
         const menu = await Menu.findById(menuId);
         if (!menu) {
             return res.status(404).json({ message: 'Menu non trouvé' });
@@ -94,6 +98,7 @@ exports.changeMenuPrice = async (req, res) => {
 
         const { menuId } = req.params;
         const { newPrice } = req.body;
+        await connectDB(); // Assurer la connexion à la base de données avant de modifier le prix du menu
         const menu = await Menu.findById(menuId);
         if (!menu) {
             return res.status(404).json({ message: 'Menu non trouvé' });
@@ -108,6 +113,7 @@ exports.changeMenuPrice = async (req, res) => {
 
 exports.listMenus = async (req, res) => {
     try {
+        await connectDB(); // Assurer la connexion à la base de données avant de récupérer les menus
         const menus = await Menu.find().populate('lines.productId');
         res.status(200).json({ message: 'Menus récupérés avec succès', menus: menus });
     } catch (error) {

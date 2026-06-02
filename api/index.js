@@ -2,7 +2,12 @@ const express = require('express');
 
 const {default: mongoose} = require('mongoose');
 
-const connectDB = require('./config/db');
+// const connectDB = require('./config/db');
+
+const cors = require('cors');
+
+// const swaggerSpec = require('./swagger');
+const setupSwagger = require('./swagger');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -10,16 +15,28 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const setupSwagger = require('./swagger');
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-// app.get('/', (req, res) => {
-//     res.json({ message: 'Bienvenue sur l\'API Wacdo' });
-// });
+app.get('/', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'WACDO API is running'
+  });
+});
+
+app.get('/test-js', (req, res) => {
+  res.type('application/javascript');
+  res.send('console.log("test");');
+});
 
 app.use('/api/employees', require('./routes/employees.routes'));
 
@@ -38,22 +55,23 @@ app.use((err, req, res, next) => {
 });
 
 if (process.env.NODE_ENV !== 'test') {
-    connectDB(); // Connexion à la base de données MongoDB uniquement si l'environnement n'est pas "test"
-} else {
+    //  connectDB(); // Connexion à la base de données MongoDB uniquement si l'environnement n'est pas "test"
+} 
+else {
     console.log("Environnement de test détecté, connexion à la base de données MongoDB ignorée");
 }
 
-setupSwagger(app);
 
-// Start server
-// app.listen(PORT, () => {
-//     console.log(`Server écoute sur le port ${PORT}`);
+
+setupSwagger(app);
+// app.get('/swagger.json', (req, res) => {
+//     res.json(swaggerSpec);
 // });
 
-if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => {
-        console.log(`Server écoute sur le port ${PORT}`);
-    });
-}
+// if (process.env.NODE_ENV !== 'test') {
+//     app.listen(PORT, () => {
+//         console.log(`Server écoute sur le port ${PORT}`);
+//     });
+// }
 
 module.exports = app;

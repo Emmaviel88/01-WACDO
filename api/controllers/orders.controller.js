@@ -1,6 +1,7 @@
+const connectDB = require('../config/db');
 const mongoose = require('mongoose');
 const Order = require('../models/order.model');
-const OrderLine = require('../models/orderLine.model');
+const OrderLine = require('../models/orderline.model');
 const Product = require('../models/product.model');
 const Menu = require('../models/menu.model');
 const { ajoutLigneCde } = require('../middlewares/miscFunctions');
@@ -9,6 +10,8 @@ const Employee = require('../models/employee.model');
 
 exports.createOrder = async (req, res) => {
     try {
+        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
+
         // Récupérer l'id de l'employé qui crée la commande à partir de l'objet utilisateur dans la requête
         const empCreation = req.user.id;
         console.log(`Utilisateur connecté dans CreateOrder : ${empCreation} (${req.user.role})`); // Affiche l'id et le rôle de l'utilisateur connecté dans la console pour le débogage
@@ -66,6 +69,8 @@ exports.createOrder = async (req, res) => {
 
 exports.updateOrderStatus = async (req, res) => {
     try {
+        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
+
         const { orderId } = req.params; // Récupérer l'id de la commande à partir des paramètres de la requête
         const newStatus = req.body.status; // Récupérer le nouveau statut de la commande à partir du corps de la requête
         
@@ -139,20 +144,52 @@ exports.updateOrderStatus = async (req, res) => {
 
 exports.getOrdersList = async (req, res) => {
     try {
+        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
+        // console.log('Ready-State après connectDB = ', mongoose.connection.readyState);
         // Récupèrer la liste de toutes les commandes dans la base de données
         const ordersList = await Order.find()
             .select('_id placeConsume status createdAt')
             .sort({ createdAt: 1 }); // Trier les commandes par date de création (les plus récentes en premier)
         // Retourner la liste des commandes
-        console.log(`La liste des commandes récupérée contient ${ordersList.length} commandes`);
+        // console.log(`La liste des commandes récupérée contient ${ordersList.length} commandes`);
         res.status(200).json({message: `La liste des commandes récupérée contient ${ordersList.length} commandes`, orders: ordersList });
     } catch (error) {
         res.status(500).json({ message: 'Erreur lors de la récupération des commandes', error: error.message });
     }
 };
+// */
+// exports.getOrdersList = async (req, res) => {
+//     try {
+//         await connectDB();
+
+//         console.log('ReadyState après connectDB =', mongoose.connection.readyState);
+
+//         console.log('Avant Order.find()');
+
+//         const ordersList = await Order.find()
+//             .select('_id placeConsume status createdAt')
+//             .sort({ createdAt: 1 });
+
+//         console.log('Après Order.find()');
+//         console.log('Nombre de commandes =', ordersList.length);
+
+//         res.status(200).json({
+//             orders: ordersList
+//         });
+
+//     } catch (error) {
+//         console.error('ERREUR COMPLETE:', error);
+
+//         res.status(500).json({
+//             message: error.message
+//         });
+//     }
+// };
 
 exports.addLineToOrder = async (req, res) => {
     try {
+        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
+
         const { orderId } = req.params; // Récupérer l'id de la commande à partir des paramètres de la requête
         const { productId, menuId, quantityOrdered } = req.body; // Récupérer les données de la ligne de commande à partir du corps de la requête
         console.log(`L153: Requête reçue dans AddOrderLine pour la commande ${orderId} : productId=${productId}, menuId=${menuId}, quantity=${quantityOrdered}`);
@@ -255,6 +292,8 @@ exports.addLineToOrder = async (req, res) => {
 
 exports.getOrderDetails = async (req, res) => {
     try {
+        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
+
         const { orderId } = req.params; // Récupérer l'id de la commande à partir des paramètres de la requête
         console.log('orderId reçu :', req.params.orderId);
 
@@ -281,6 +320,8 @@ exports.getOrderDetails = async (req, res) => {
 
 exports.deleteOrderLine = async (req, res) => {
     try {
+        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
+        
         const { orderId } = req.params; // Récupérer l'id de la commande à partir des paramètres de la requête
         const { orderLineId } = req.body; // Récupérer l'id de la ligne de commande à supprimer à partir du corps de la requête
         // Vérifier si la commande existe
