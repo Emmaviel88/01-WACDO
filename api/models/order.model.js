@@ -12,4 +12,4 @@ const orderSchema = new mongoose.Schema({
     placeConsume: { type: String, enum: ['DINE-IN', 'TAKEAWAY', 'DELIVERY'], required: true },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Order', orderSchema);
+module.exports = mongoose.models.Order || mongoose.model('Order', orderSchema);

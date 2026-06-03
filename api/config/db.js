@@ -2,6 +2,15 @@ const {default: mongoose} = require('mongoose');
 
 const connectDB = async () => {
     try {
+        if(process.env.NODE_ENV === 'test') {
+            console.log('✅ Running in test environment, skipping MongoDB connection');
+            return;
+        }
+        
+        if(mongoose.connection.readyState === 1) {
+            console.log('✅ Already connected to MongoDB');
+            return;
+        }
         // La chaîne de connexion est construite à partir des variables d'environnement DB_USER et DB_PASSWORD, 
         // qui contiennent respectivement le nom d'utilisateur et le mot de passe pour se connecter à la base de données MongoDB.
         // On utilise dotenv pour ne pas divulguer ces informations sensibles dans le code source.

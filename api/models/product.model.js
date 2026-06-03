@@ -10,4 +10,4 @@ const productSchema = new mongoose.Schema({
     isOption: {type: Boolean, default: false},
 }, {timestamps: true});
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.models.Product || mongoose.model('Product', productSchema);

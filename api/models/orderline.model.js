@@ -8,4 +8,4 @@ const orderLineSchema = new mongoose.Schema({
     price: { type: Number, required: true, default: 0 },
 }, { timestamps: true });
 
-module.exports = mongoose.model('OrderLine', orderLineSchema);
+module.exports = mongoose.models.OrderLine || mongoose.model('OrderLine', orderLineSchema);

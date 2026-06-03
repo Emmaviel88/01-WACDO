@@ -60,12 +60,15 @@ exports.loginEmployee = async (req, res) => {
         if (!existingEmployee) {
             return res.status(400).json({ message: 'Login ou mot de passe incorrect' });
         }
-        
+        // console.log("Employé trouvé :", existingEmployee);
+        // console.log("Password reçu :", password);
+        // console.log("Password en base :", existingEmployee.password);
         // Compare le mot de passe saisi avec le mot de passe hashé en BDD
         const isPwdOk = await bcrypt.compare(password, existingEmployee.password);
         if (!isPwdOk) {
             return res.status(400).json({ message: 'Login ou mot de passe incorrect' });
         }
+        // console.log('JWT_SECRET =', process.env.JWT_SECRET);
         // Génère un token JWT
         const token = jwt.sign({ id: existingEmployee._id, login: existingEmployee.login, role: existingEmployee.role.toUpperCase() }, process.env.JWT_SECRET, { expiresIn: '24h' });
         // console.log("User : " + existingEmployee.login + " connecté avec succès, role : " + existingEmployee.role);
@@ -73,6 +76,8 @@ exports.loginEmployee = async (req, res) => {
         console.log(`Token reçu dans login : ${token}`);
         res.status(200).json({ message: 'Connexion réussie', token });
     } catch (error) {
+        console.error(error);
+
         res.status(500).json({ message: 'L74 Erreur lors de la connexion', error });
     }
 };

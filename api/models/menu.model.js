@@ -11,4 +11,4 @@ const menuSchema = new mongoose.Schema({
     price: { type: Number, default: 0 }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Menu', menuSchema);
+module.exports = mongoose.models.Menu || mongoose.model('Menu', menuSchema);

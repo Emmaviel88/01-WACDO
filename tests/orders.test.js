@@ -1,16 +1,16 @@
 const request = require('supertest');
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const { default: mongoose } = require('mongoose');
-const { testsAdd } = require('../middlewares/miscFunctions');
-const Employee = require('../models/employee.model');
-const Order = require('../models/order.model');
-const Product = require('../models/product.model');
-const OrderLine = require('../models/orderLine.model');
+const { testsAdd } = require('../api/middlewares/miscFunctions');
+const Employee = require('../api/models/employee.model');
+const Order = require('../api/models/order.model');
+const Product = require('../api/models/product.model');
+const OrderLine = require('../api/models/orderLine.model');
 
 let adminEmployee;
 
 // Création d'un mock pour le middleware d'authentification afin de simuler un utilisateur connecté
-jest.mock('../middlewares/auth', () => {
+jest.mock('../api/middlewares/auth', () => {
     return (req, res, next) => {
         req.user = {
             id: global.adminEmployeeId, // Utiliser l'ID de l'employé admin créé dans la base de données en mémoire
@@ -21,7 +21,7 @@ jest.mock('../middlewares/auth', () => {
     };
 });
 
-const app = require('../app');
+const app = require('../api/index');
 
 // Création DB en mémoire
 let mongoServer;

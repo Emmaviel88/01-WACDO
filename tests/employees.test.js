@@ -1,10 +1,10 @@
 const request = require('supertest');
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const { default: mongoose } = require('mongoose');
-const { testsAdd } = require('../middlewares/miscFunctions');
+const { testsAdd } = require('../api/middlewares/miscFunctions');
 
 // Création d'un mock pour le middleware d'authentification afin de simuler un utilisateur connecté
-jest.mock('../middlewares/auth', () => {
+jest.mock('../api/middlewares/auth', () => {
     return (req, res, next) => {
         req.user = {
             _id: "69c7fran5da2f6ebf06579d9",
@@ -15,12 +15,14 @@ jest.mock('../middlewares/auth', () => {
     };
 });
 
-const app = require('../app');
+const app = require('../api/index');
 
 // Création DB en mémoire
 let mongoServer;
 
 beforeAll(async() => {
+    // Définit une variable d'environnement pour le secret JWT utilisé dans les tests
+    process.env.JWT_SECRET = 'test-secret';
     mongoServer = await MongoMemoryServer.create();
     await mongoose.connect(mongoServer.getUri(), {dbName: 'JestTests'});
 });

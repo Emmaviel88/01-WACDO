@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const auth = (req, res, next) => {
     
     const authHeader = req.header('authorization');
-    console.log(`auth-L7 : Hearder reçu : `, authHeader);
+    console.log(`auth-L7 : Header reçu : `, authHeader);
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
