@@ -189,9 +189,9 @@ router.put('/updateStatus/:orderId', auth, updateOrderStatus);
  *                     type: string
  *                   createdAt:
  *                     type: string
- *                     descritpion: Date et heure de création 
+ *                     description: Date et heure de création 
  *       500: 
- *         descritpion: Erreur serveur
+ *         description: Erreur serveur
  */
 router.get('/list', getOrdersList);
 
@@ -261,7 +261,7 @@ router.get('/list', getOrdersList);
  *                 message:
  *                   type: string
  *       500: 
- *         descritpion: Erreur serveur
+ *         description: Erreur serveur
  *         content:
  *           application/json:
  *             schema:
@@ -316,7 +316,7 @@ router.post('/addLineToOrder/:orderId', auth, addLineToOrder);
  *                     status:
  *                       type: string
  *                       enum: ['PREPARING', 'READY', 'DELIVERED']
- *                       descritption: le statut courant de la commande     
+ *                       description: le statut courant de la commande     
  *                     lines:
  *                       type: array
  *                       items:
@@ -335,7 +335,7 @@ router.post('/addLineToOrder/:orderId', auth, addLineToOrder);
  *                     price:
  *                       type: number
  *       500: 
- *         descritpion: Erreur serveur
+ *         description: Erreur serveur
  */
 router.get('/orderDetails/:orderId', getOrderDetails);
 
@@ -389,7 +389,7 @@ router.get('/orderDetails/:orderId', getOrderDetails);
  *                 message:
  *                   type: string
  *       500: 
- *         descritpion: Erreur serveur
+ *         description: Erreur serveur
  *         content:
  *           application/json:
  *             schema:
