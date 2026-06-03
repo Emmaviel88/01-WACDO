@@ -1,4 +1,3 @@
-const connectDB = require('../config/db');
 const mongoose = require('mongoose');
 const Order = require('../models/order.model');
 const OrderLine = require('../models/orderline.model');
@@ -10,8 +9,6 @@ const Employee = require('../models/employee.model');
 
 exports.createOrder = async (req, res) => {
     try {
-        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
-
         // Récupérer l'id de l'employé qui crée la commande à partir de l'objet utilisateur dans la requête
         const empCreation = req.user.id;
         console.log(`Utilisateur connecté dans CreateOrder : ${empCreation} (${req.user.role})`); // Affiche l'id et le rôle de l'utilisateur connecté dans la console pour le débogage
@@ -69,8 +66,6 @@ exports.createOrder = async (req, res) => {
 
 exports.updateOrderStatus = async (req, res) => {
     try {
-        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
-
         const { orderId } = req.params; // Récupérer l'id de la commande à partir des paramètres de la requête
         const newStatus = req.body.status; // Récupérer le nouveau statut de la commande à partir du corps de la requête
         
@@ -144,14 +139,11 @@ exports.updateOrderStatus = async (req, res) => {
 
 exports.getOrdersList = async (req, res) => {
     try {
-        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
-        // console.log('Ready-State après connectDB = ', mongoose.connection.readyState);
         // Récupèrer la liste de toutes les commandes dans la base de données
         const ordersList = await Order.find()
             .select('_id placeConsume status createdAt')
             .sort({ createdAt: 1 }); // Trier les commandes par date de création (les plus récentes en premier)
         // Retourner la liste des commandes
-        // console.log(`La liste des commandes récupérée contient ${ordersList.length} commandes`);
         res.status(200).json({message: `La liste des commandes récupérée contient ${ordersList.length} commandes`, orders: ordersList });
     } catch (error) {
         res.status(500).json({ message: 'Erreur lors de la récupération des commandes', error: error.message });
@@ -188,8 +180,6 @@ exports.getOrdersList = async (req, res) => {
 
 exports.addLineToOrder = async (req, res) => {
     try {
-        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
-
         const { orderId } = req.params; // Récupérer l'id de la commande à partir des paramètres de la requête
         const { productId, menuId, quantityOrdered } = req.body; // Récupérer les données de la ligne de commande à partir du corps de la requête
         console.log(`L153: Requête reçue dans AddOrderLine pour la commande ${orderId} : productId=${productId}, menuId=${menuId}, quantity=${quantityOrdered}`);
@@ -209,9 +199,8 @@ exports.addLineToOrder = async (req, res) => {
         if (productId === null && menuId === null) {
             return res.status(400).json({ message: 'L171: Au moins un id de Produit ou de Menu est requis pour ajouter une ligne de commande' });
         }      
-        
-        // Vérifier si l'utilisateur est connecté et possède le rôle ADMIN ou RECEPTION
-                // Récupérer l'id de l'employé qui met à jour la commande à partir de l'objet utilisateur dans la requête (celui qui s'est loggé pour faire la requête)
+
+        // Récupérer l'id de l'employé qui met à jour la commande à partir de l'objet utilisateur dans la requête (celui qui s'est loggé pour faire la requête)
         const empUpdateId = req.user.id;
         console.log(`Utilisateur connecté dans addLineToOrder : ${empUpdateId} (${req.user.role})`); // Affiche l'id et le rôle de l'utilisateur connecté dans la console pour le débogage
 
@@ -226,7 +215,7 @@ exports.addLineToOrder = async (req, res) => {
             return res.status(404).json({ message: 'L189: Employé non trouvé' });
         }
         
-        // Vérifier si l'employé a le rôle de "ACCUEIL" ou "ADMIN" (un employé au status IDLE ne peut pas créer de commande)
+        // Vérifier si l'employé a le rôle de "RECEPTION" ou "ADMIN" (un employé au status IDLE ne peut pas créer de commande)
         const validRoles = ['RECEPTION', 'ADMIN'];
         if (!validRoles.includes(employeeExists.role.toUpperCase())) {
             return res.status(403).json({ message: 'L195: Accès refusé : vous devez être un utilisateur RECEPTION,  ou ADMIN pour ajouter une ligne à une commande' });
@@ -292,8 +281,6 @@ exports.addLineToOrder = async (req, res) => {
 
 exports.getOrderDetails = async (req, res) => {
     try {
-        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
-
         const { orderId } = req.params; // Récupérer l'id de la commande à partir des paramètres de la requête
         console.log('orderId reçu :', req.params.orderId);
 
@@ -319,9 +306,7 @@ exports.getOrderDetails = async (req, res) => {
 };
 
 exports.deleteOrderLine = async (req, res) => {
-    try {
-        await connectDB(); // On s'assure que la connexion à la BDD est établie avant d'effectuer des opérations de lecture
-        
+    try {        
         const { orderId } = req.params; // Récupérer l'id de la commande à partir des paramètres de la requête
         const { orderLineId } = req.body; // Récupérer l'id de la ligne de commande à supprimer à partir du corps de la requête
         // Vérifier si la commande existe
@@ -332,7 +317,7 @@ exports.deleteOrderLine = async (req, res) => {
             return res.status(404).json({ message: 'Commande non trouvée' });
         }
         // Vérifier le status de la commande : une ligne de commande ne peut être supprimée que si la commande est au statut "PREPARING" ou "READY" 
-        // (la commande est au statut "PENDING" à sa création, elle passe à "PREPARING" dès qu'une ligne de commande est ajoutée, 
+        // (la commande est au statut "PENDING" à sa création. Elle passe à "PREPARING" dès qu'une ligne de commande est ajoutée, 
         // et elle passe à "READY" lorsque la préparation de la commande est terminée, donc tant que la commande n'est pas encore livrée, on peut supprimer une ligne de commande)
         if (order.status !== 'PREPARING' && order.status !== 'READY') {
             return res.status(400).json({ message: 'Une ligne de commande ne peut être supprimée que si la commande est au statut PREPARING ou READY' });

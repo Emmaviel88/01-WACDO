@@ -1,4 +1,3 @@
-const connectDB = require('../config/db');
 const mongoose = require('mongoose');
 const Product = require('../models/product.model');
 
@@ -12,7 +11,6 @@ exports.createProduct = async (req, res) => {
 
         // Récupérer les informations du produit à partir de la requête
         const { name, description, price, imageUrl, category, stock, isOption } = req.body;
-        await connectDB(); // Assurer que la connexion à la base de données est établie avant de continuer
         // Vérifier si un produit avec le même nom existe déjà
         const existingProduct = await Product.findOne({ name });
         if (existingProduct) {
@@ -53,7 +51,6 @@ exports.updateProduct = async (req, res) => {
         const productId = req.params.id;
         // Récupérer les nouvelles informations du produit à partir de la requête
         const { name, description, price, imageUrl, category, stock, isOption } = req.body;
-        await connectDB(); // Assurer que la connexion à la base de données est établie avant de continuer
         // Vérifier si le produit existe
         const existingProduct = await Product.findById(productId);
         if (!existingProduct) {
@@ -94,7 +91,6 @@ exports.deleteProduct = async (req, res) => {
         }
         // Récupérer l'ID du produit à partir des paramètres de la requête
         const productId = req.params.id;
-        await connectDB(); // Assurer que la connexion à la base de données est établie avant de continuer
         // Vérifier si le produit existe
         const existingProduct = await Product.findById(productId);
         if (!existingProduct) {
@@ -115,17 +111,12 @@ exports.updateProductStock = async (req, res) => {
         const  productId  = req.params.id;
         const  qtySold  = parseInt(req.body.qtySold); // Quantité vendue à soustraire du stock   
 
-        // console.log('updateProductStock - L116 : productId =', productId, 'qtySold =', qtySold);
-        await connectDB(); // Assurer que la connexion à la base de données est établie avant de continuer
-
         const existingProduct = await Product.findById(productId);
         if (!existingProduct) {
             return res.status(404).json({ message: 'Produit non trouvé' });
         }
         // Récupérer la nouvelle quantité de stock à partir de la requête
         const newStock = parseInt(existingProduct.stock) - qtySold;
-
-        // console.log('updateProductStock - L125 : existingProduct.stock =', existingProduct.stock, 'newStock =', newStock);
 
         if (newStock < 0) {
             return res.status(400).json({ message: 'Stock insuffisant pour ce produit' });
@@ -153,7 +144,6 @@ exports.updateProductStock = async (req, res) => {
 // Récupérer tous les produits
 exports.getAllProducts = async (req, res) => {
     try {
-        await connectDB(); // Assurer que la connexion à la base de données est établie avant de continuer
         const products = await Product.find().select(' -createdAt -updatedAt -__v');
 
         res.status(200).json({ message: `${products.length} produit${products.length > 1 ? 's récupérés' : ' récupéré'} avec succès`, products });

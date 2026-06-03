@@ -1,4 +1,4 @@
-const connectDB = require('../config/db');
+// const connectDB = require('../config/db');
 const mongoose = require('mongoose');
 const Employee = require('../models/employee.model');
 const bcrypt = require('bcryptjs');
@@ -17,7 +17,6 @@ exports.createEmployee = async (req, res) => {
         }
         // Récupère les données du corps de la requête
         const { login, password, role } = req.body;
-        await connectDB(); // Assure que la connexion à la base de données est établie avant de continuer
         // Vérifie si l'employé à créer existe déjà
         const existingEmployee = await Employee.findOne({ login });
         if (existingEmployee) {
@@ -54,21 +53,15 @@ exports.loginEmployee = async (req, res) => {
         if (!login || !password) {
             return res.status(400).json({ message: 'Veuillez fournir un login et un mot de passe' });
         }
-        await connectDB(); // Assure que la connexion à la base de données est établie avant de continuer
         // Cherche l'employé par son login dans la BDD
         const existingEmployee = await Employee.findOne({ login });
         if (!existingEmployee) {
             return res.status(400).json({ message: 'Login ou mot de passe incorrect' });
         }
-        // console.log("Employé trouvé :", existingEmployee);
-        // console.log("Password reçu :", password);
-        // console.log("Password en base :", existingEmployee.password);
-        // Compare le mot de passe saisi avec le mot de passe hashé en BDD
         const isPwdOk = await bcrypt.compare(password, existingEmployee.password);
         if (!isPwdOk) {
             return res.status(400).json({ message: 'Login ou mot de passe incorrect' });
         }
-        // console.log('JWT_SECRET =', process.env.JWT_SECRET);
         // Génère un token JWT
         const token = jwt.sign({ id: existingEmployee._id, login: existingEmployee.login, role: existingEmployee.role.toUpperCase() }, process.env.JWT_SECRET, { expiresIn: '24h' });
         // console.log("User : " + existingEmployee.login + " connecté avec succès, role : " + existingEmployee.role);
@@ -94,7 +87,6 @@ exports.editEmployee = async (req, res) => {
         }
         const { id } = req.params;
         const { login, password, role } = req.body;
-        await connectDB(); // Assure que la connexion à la base de données est établie avant de continuer
         // Vérifie si l'employé à modifier existe
         const existingEmployee = await Employee.findById(id);
         if (!existingEmployee) {
@@ -138,7 +130,6 @@ exports.deleteEmployee = async (req, res) => {
             return res.status(403).json({ message: 'L116 : Accès refusé, vous n\'êtes pas autorisé à supprimer un employé' });
         }
         const { id } = req.params;
-        await connectDB();
         // Vérifie si l'employé à supprimer existe
         const existingEmployee = await Employee.findById(id);
         if (!existingEmployee) {
@@ -156,22 +147,12 @@ exports.deleteEmployee = async (req, res) => {
 
 exports.listEmployees = async (req, res) => {
     try {
-        await connectDB(); // Assure que la connexion à la base de données est établie avant de continuer
-        //const employees = await Employee.find().select('-password'); // Exclut le champ password de la liste des employés
         const employees = await Employee.find().select('-password'); // Exclut le champ password de la liste des employés
         console.log(`Liste des employés récupérée, contient ${employees.length} employés`);
         res.status(200).json({ employees });
     } 
-    // catch (error) {
-    //     res.status(500).json({ message: 'L139 Erreur lors de la récupération de la liste des employés', error });
-    // }
     catch (error) {
-    console.error('L139', error);
-
-    res.status(500).json({
-        message: 'L139 Erreur lors de la récupération de la liste des employés',
-        error: error.message,
-        stack: error.stack
-        });
-    }
+        res.status(500).json({ message: 'L139 Erreur lors de la récupération de la liste des employés', error });
+    };
+   
 };

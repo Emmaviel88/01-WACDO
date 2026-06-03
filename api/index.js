@@ -1,19 +1,15 @@
 const express = require('express');
 
-const {default: mongoose} = require('mongoose');
-
-// const connectDB = require('./config/db');
-
 const cors = require('cors');
 
-// const swaggerSpec = require('./swagger');
 const setupSwagger = require('./swagger');
 const path = require('path');
-const dotenv = require('dotenv').config({path: path.join(__dirname, '.env')});
-// dotenv.config();
+require('dotenv').config({path: path.join(__dirname, '.env')});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const connectDB = require('../api/config/db');
 
 app.use(cors({
   origin: '*',
@@ -40,7 +36,7 @@ app.get('/test-js', (req, res) => {
 
 app.use('/api/employees', require('./routes/employees.routes'));
 
-// app.use('/api/customers', require('./routes/customers.routes')); // Non demandé pour l'instant
+// app.use('/api/customers', require('./routes/customers.routes')); // Non demandé dans le cahier des charges, à implémenter ultérieurement
 
 app.use('/api/products', require('./routes/products.routes'));
 
@@ -54,19 +50,27 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Une erreur s\'est produite ' + err });
 });
 
-if (process.env.NODE_ENV !== 'test') {
-    //  connectDB(); // Connexion à la base de données MongoDB uniquement si l'environnement n'est pas "test"
-} 
-else {
-    console.log("Environnement de test détecté, connexion à la base de données MongoDB ignorée");
-}
+const start = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`Server écoute sur le port ${PORT}`);
+    });
+  } catch (err) {
+    console.error('Impossible de démarrer le serveur :', err);
+    process.exit(1);
+  }
+};
 
 setupSwagger(app);
 
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => {
-        console.log(`Server écoute sur le port ${PORT}`);
-    });
+  //  connectDB(); // Connexion à la base de données MongoDB uniquement si l'environnement n'est pas "test"
+  start();
+} 
+else {
+    console.log("Environnement de test détecté, connexion à la base de données MongoDB ignorée");
 }
 
 module.exports = app;
