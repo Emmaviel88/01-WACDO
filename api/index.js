@@ -8,9 +8,9 @@ const cors = require('cors');
 
 // const swaggerSpec = require('./swagger');
 const setupSwagger = require('./swagger');
-
-const dotenv = require('dotenv');
-dotenv.config();
+const path = require('path');
+const dotenv = require('dotenv').config({path: path.join(__dirname, '.env')});
+// dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -61,17 +61,12 @@ else {
     console.log("Environnement de test détecté, connexion à la base de données MongoDB ignorée");
 }
 
-
-
 setupSwagger(app);
-// app.get('/swagger.json', (req, res) => {
-//     res.json(swaggerSpec);
-// });
 
-// if (process.env.NODE_ENV !== 'test') {
-//     app.listen(PORT, () => {
-//         console.log(`Server écoute sur le port ${PORT}`);
-//     });
-// }
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(PORT, () => {
+        console.log(`Server écoute sur le port ${PORT}`);
+    });
+}
 
 module.exports = app;

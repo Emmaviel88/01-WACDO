@@ -161,7 +161,17 @@ exports.listEmployees = async (req, res) => {
         const employees = await Employee.find().select('-password'); // Exclut le champ password de la liste des employés
         console.log(`Liste des employés récupérée, contient ${employees.length} employés`);
         res.status(200).json({ employees });
-    } catch (error) {
-        res.status(500).json({ message: 'L139 Erreur lors de la récupération de la liste des employés', error });
+    } 
+    // catch (error) {
+    //     res.status(500).json({ message: 'L139 Erreur lors de la récupération de la liste des employés', error });
+    // }
+    catch (error) {
+    console.error('L139', error);
+
+    res.status(500).json({
+        message: 'L139 Erreur lors de la récupération de la liste des employés',
+        error: error.message,
+        stack: error.stack
+        });
     }
 };
