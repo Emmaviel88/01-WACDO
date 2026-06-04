@@ -70,24 +70,25 @@ router.post('/', auth, createEmployee);
  *                 format: password
  *     responses:
  *       200:
- *        description: Authentification réussie, retourne un token JWT
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *              message:
- *                type: string
- *              token:
- *                type: string
+ *         description: Authentification réussie, retourne un token JWT
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Authentification réussie
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR...
  *       400:
- *        description: Requête invalide, login ou mot de passe manquant
+ *         description: Requête invalide, login ou mot de passe manquant
  *       401:
- *        description: Authentification échouée, login ou mot de passe incorrect
+ *         description: Authentification échouée, login ou mot de passe incorrect
  *       500:
- *        description: Erreur serveur
- *
-*/
+ *         description: Erreur serveur
+ */
 router.post('/login', loginEmployee);
 
 // Route de modification d'un employé (protégée par le middleware d'authentification)

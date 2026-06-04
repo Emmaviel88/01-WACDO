@@ -27,7 +27,7 @@ const router = express.Router();
  *                 type: string
  *     responses:
  *       201:
- *         description: Comamnde créée
+ *         description: Commande créée
  *         content:
  *           application/json:
  *             schema:
@@ -45,16 +45,18 @@ const router = express.Router();
  *                       description: Id du user connecté
  *                     empPrepared:
  *                       type: string
- *                       default: 'null'
+ *                       nullable: true
  *                     empDelivered:
  *                       type: string
- *                       default: 'null'
+ *                       nullable: true
  *                     status:
  *                       type: string
  *                       enum: [PENDING, PREPARING, READY, DELIVERED]
  *                     lines:
  *                      type: array
  *                      default: []
+ *                      items:
+ *                        type: object
  *                     price:
  *                       type: number
  *                       format: float

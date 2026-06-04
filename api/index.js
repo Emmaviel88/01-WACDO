@@ -55,11 +55,10 @@ const start = async () => {
     await connectDB();
 
     app.listen(PORT, () => {
-      console.log(`Server écoute sur le port ${PORT}`);
+      console.log(`✅ Server écoute sur le port ${PORT}`);
     });
   } catch (err) {
-    console.error('Impossible de démarrer le serveur :', err);
-    process.exit(1);
+    console.error('❌ Impossible de démarrer le serveur :', err);
   }
 };
 
