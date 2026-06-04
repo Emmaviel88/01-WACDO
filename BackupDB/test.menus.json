@@ -1,0 +1,170 @@
+[{
+  "_id": {
+    "$oid": "69d3de20bafcfe3e541d43a1"
+  },
+  "name": "Menu 1",
+  "lines": [
+    {
+      "productId": {
+        "$oid": "69d10603b509a6ad01c3c5d2"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "69d3df46fd8bd23b0fe723a0"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69d1159b6e70d23777319d6b"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "69da6db913d03f234729d41d"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69d115ed6e70d23777319d6f"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "69da6dd313d03f234729d424"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69da74079c7f33ece075b3d8"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "69da76667bf72d4502804ae3"
+      }
+    }
+  ],
+  "price": 12.9,
+  "createdAt": {
+    "$date": "2026-04-06T16:24:00.417Z"
+  },
+  "updatedAt": {
+    "$date": "2026-04-11T16:27:18.650Z"
+  },
+  "__v": 8
+},
+{
+  "_id": {
+    "$oid": "69da762a7bf72d4502804ad6"
+  },
+  "name": "Menu Pizza",
+  "lines": [
+    {
+      "productId": {
+        "$oid": "69da74079c7f33ece075b3d8"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "69da76807bf72d4502804ae7"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69d1159b6e70d23777319d6b"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "69da76b37bf72d4502804aed"
+      }
+    }
+  ],
+  "price": 12.85,
+  "createdAt": {
+    "$date": "2026-04-11T16:26:18.696Z"
+  },
+  "updatedAt": {
+    "$date": "2026-04-12T13:05:15.619Z"
+  },
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "69db98d3330b19369f0a55c4"
+  },
+  "name": "Essai de création depuis OpenAPI",
+  "lines": [
+    {
+      "productId": {
+        "$oid": "69da74079c7f33ece075b3d8"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "69db9a30330b19369f0a55f2"
+      }
+    }
+  ],
+  "price": 16.9,
+  "createdAt": {
+    "$date": "2026-04-12T13:06:27.171Z"
+  },
+  "updatedAt": {
+    "$date": "2026-04-12T13:12:16.197Z"
+  },
+  "__v": 5
+},
+{
+  "_id": {
+    "$oid": "6a10a9ac8dda382d859584e7"
+  },
+  "name": "Menu 63",
+  "lines": [
+    {
+      "productId": {
+        "$oid": "69d1159b6e70d23777319d6b"
+      },
+      "quantity": 5,
+      "_id": {
+        "$oid": "6a10adaff6d44ef77bbace20"
+      }
+    }
+  ],
+  "price": 9.99,
+  "createdAt": {
+    "$date": "2026-05-22T19:08:28.203Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-22T19:25:35.437Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "6a202eb82eb76ea842da521f"
+  },
+  "name": "TEST 2026-06-03",
+  "lines": [
+    {
+      "productId": {
+        "$oid": "69d115ed6e70d23777319d6f"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6a202f202eb76ea842da5228"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69d1159b6e70d23777319d6b"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6a202f522eb76ea842da522a"
+      }
+    }
+  ],
+  "price": 10.5,
+  "createdAt": {
+    "$date": "2026-06-03T13:40:08.947Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T13:44:19.382Z"
+  },
+  "__v": 2
+}]

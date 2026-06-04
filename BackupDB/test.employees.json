@@ -1,0 +1,75 @@
+[{
+  "_id": {
+    "$oid": "69c7cdae5da2f6ebf06579d9"
+  },
+  "login": "Adm_01",
+  "password": "$2b$10$NNTgjJDCL7KlsLYYiC790e3W1WDpDbH79Q4YFNUt.QMbVzh1DHyFy",
+  "role": "ADMIN",
+  "createdAt": {
+    "$date": "2026-03-28T12:46:38.191Z"
+  },
+  "updatedAt": {
+    "$date": "2026-04-02T19:33:37.727Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c7eaf1141fa304586c5e90"
+  },
+  "login": "Emp_03",
+  "password": "$2b$10$XcYRNIRe9lNaOw/wh6JCbuaIPOsG0xYC5x7DZbzOU2E6IdvJiUu2u",
+  "role": "RECEPTION",
+  "createdAt": {
+    "$date": "2026-03-28T14:51:29.228Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T13:32:00.275Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c7ec427fe3fd067508a7f3"
+  },
+  "login": "Emp_04",
+  "password": "$2b$10$330gqKYtdmoDZNKPDst33OFWOM89OELj/bZwL83mWvWv2OWSiMWHu",
+  "role": "PREPARATION",
+  "createdAt": {
+    "$date": "2026-03-28T14:57:06.168Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T13:32:47.621Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69cfba5c159c6ee3623b002e"
+  },
+  "login": "Emp_05",
+  "password": "$2b$10$m/r/drkxrSqUdW88mnnnpOAt5P7pMOBuMoLTI6BwUEtWh9FG3P0ni",
+  "role": "DELIVERY",
+  "createdAt": {
+    "$date": "2026-04-03T13:02:20.453Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T13:33:24.368Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a202de42eb76ea842da5216"
+  },
+  "login": "Emp_02",
+  "password": "$2b$10$bhKxOH6/SPTbZQ.CcFcY1eJ7HShFLUStfsYEf9CjOCe6o9V1xquDm",
+  "role": "IDLE",
+  "createdAt": {
+    "$date": "2026-06-03T13:36:36.563Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T13:36:36.563Z"
+  },
+  "__v": 0
+}]

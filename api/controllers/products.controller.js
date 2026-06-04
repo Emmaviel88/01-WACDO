@@ -148,6 +148,6 @@ exports.getAllProducts = async (req, res) => {
 
         res.status(200).json({ message: `${products.length} produit${products.length > 1 ? 's récupérés' : ' récupéré'} avec succès`, products });
     } catch (error) {
-        res.status(500).json({ message: 'Erreur lors de la récupération des produits', error });
+        res.status(500).json({ message: 'Erreur lors de la récupération des produits', error: error.message, name: error.name });
     }
 };

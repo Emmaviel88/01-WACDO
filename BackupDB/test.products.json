@@ -1,0 +1,95 @@
+[{
+  "_id": {
+    "$oid": "69d10603b509a6ad01c3c5d2"
+  },
+  "name": "Salade vegetarienne",
+  "description": "Salade composée de laitue fraiche avec graine de courge et fromage de chèvre., .",
+  "price": 12.9,
+  "imageUrl": "",
+  "category": "VEGIS",
+  "stock": 36,
+  "isOption": false,
+  "createdAt": {
+    "$date": "2026-04-04T12:37:23.897Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-01T16:12:58.483Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69d1159b6e70d23777319d6b"
+  },
+  "name": "50cl Eau plate",
+  "description": "Eau de source non gazeuse 50cl",
+  "price": 2,
+  "imageUrl": "",
+  "category": "BEVERAGES",
+  "stock": 93,
+  "isOption": false,
+  "createdAt": {
+    "$date": "2026-04-04T13:43:55.348Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T13:48:52.138Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69d115ed6e70d23777319d6f"
+  },
+  "name": "Autre produit",
+  "description": "Produit 3 créé pour tests",
+  "price": 8.8,
+  "imageUrl": "",
+  "category": "MEATS",
+  "stock": 123440,
+  "isOption": true,
+  "createdAt": {
+    "$date": "2026-04-04T13:45:17.972Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T13:48:51.612Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69da74079c7f33ece075b3d8"
+  },
+  "name": "Pizza Nathew",
+  "description": "Tomate, fromage, jambon, mozzarella",
+  "price": 10.9,
+  "imageUrl": "",
+  "category": "MEATS",
+  "stock": 10,
+  "isOption": false,
+  "createdAt": {
+    "$date": "2026-04-11T16:17:11.889Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T09:28:18.953Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a2031c72eb76ea842da525b"
+  },
+  "name": "Coca 50 cl",
+  "description": "Grand Soda",
+  "price": 4,
+  "imageUrl": "string",
+  "category": "BEVERAGES",
+  "stock": 123,
+  "isOption": false,
+  "createdAt": {
+    "$date": "2026-06-03T13:53:11.297Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T13:53:11.297Z"
+  },
+  "__v": 0
+}]

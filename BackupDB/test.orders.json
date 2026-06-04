@@ -1,0 +1,177 @@
+[{
+  "_id": {
+    "$oid": "69d9453ea56249863b4102a4"
+  },
+  "empCreated": {
+    "$oid": "69c7ec427fe3fd067508a7f3"
+  },
+  "empPrepared": null,
+  "empDelivered": null,
+  "status": "PREPARING",
+  "lines": [
+    {
+      "$oid": "69da5ae9468c5c9d474bccca"
+    },
+    {
+      "$oid": "69da5b17468c5c9d474bccd5"
+    },
+    {
+      "$oid": "69da5b17468c5c9d474bccdc"
+    }
+  ],
+  "total": 20.4,
+  "placeConsume": "TAKEAWAY",
+  "createdAt": {
+    "$date": "2026-04-10T18:45:18.858Z"
+  },
+  "updatedAt": {
+    "$date": "2026-04-11T14:30:47.678Z"
+  },
+  "__v": 21
+},
+{
+  "_id": {
+    "$oid": "69d948ddb5a2a583f87b1905"
+  },
+  "empCreated": {
+    "$oid": "69c7ec427fe3fd067508a7f3"
+  },
+  "empPrepared": {
+    "$oid": "69cfddc7e2376a688a5eec54"
+  },
+  "empDelivered": null,
+  "status": "READY",
+  "lines": [
+    {
+      "$oid": "6a1daf8a0c2a74df0bf61270"
+    },
+    {
+      "$oid": "6a1db08e0c2a74df0bf61271"
+    }
+  ],
+  "total": 16.9,
+  "placeConsume": "DINE-IN",
+  "createdAt": {
+    "$date": "2026-04-10T19:00:45.922Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-01T16:22:54.690Z"
+  },
+  "__v": 49
+},
+{
+  "_id": {
+    "$oid": "69da76e37bf72d4502804af8"
+  },
+  "empCreated": {
+    "$oid": "69c7ec427fe3fd067508a7f3"
+  },
+  "empPrepared": {
+    "$oid": "69c7cdae5da2f6ebf06579d9"
+  },
+  "empDelivered": {
+    "$oid": "69c7eaf1141fa304586c5e90"
+  },
+  "status": "DELIVERED",
+  "lines": [
+    {
+      "$oid": "6a1ff2a7fec74a4aaacdecc7"
+    },
+    {
+      "$oid": "6a1ff3b3fec74a4aaacdecc8"
+    },
+    {
+      "$oid": "6a1ff3d3fec74a4aaacdecc9"
+    }
+  ],
+  "total": 34.6,
+  "placeConsume": "DINE-IN",
+  "createdAt": {
+    "$date": "2026-04-11T16:29:23.928Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T09:32:42.050Z"
+  },
+  "__v": 7
+},
+{
+  "_id": {
+    "$oid": "6a10a9188dda382d859584e6"
+  },
+  "empCreated": {
+    "$oid": "69c7cdae5da2f6ebf06579d9"
+  },
+  "empPrepared": null,
+  "empDelivered": null,
+  "status": "PENDING",
+  "total": 0,
+  "placeConsume": "TAKEAWAY",
+  "createdAt": {
+    "$date": "2026-05-22T19:06:00.360Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T12:54:20.142Z"
+  },
+  "__v": 1,
+  "lines": [
+    {
+      "$oid": "6a2023fcba6eb07f18cac401"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6a1da093d3e6a55032fb0ddd"
+  },
+  "empCreated": {
+    "$oid": "69c7cdae5da2f6ebf06579d9"
+  },
+  "empPrepared": null,
+  "empDelivered": null,
+  "status": "PREPARING",
+  "lines": [
+    {
+      "$oid": "6a1da154d3e6a55032fb0dde"
+    },
+    {
+      "$oid": "6a1da5e024955dd12003ec04"
+    }
+  ],
+  "total": 14.899999999999999,
+  "placeConsume": "DINE-IN",
+  "createdAt": {
+    "$date": "2026-06-01T15:09:07.202Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T12:57:33.938Z"
+  },
+  "__v": 4
+},
+{
+  "_id": {
+    "$oid": "6a2030532eb76ea842da5242"
+  },
+  "empCreated": {
+    "$oid": "69c7cdae5da2f6ebf06579d9"
+  },
+  "empPrepared": null,
+  "empDelivered": null,
+  "status": "PREPARING",
+  "lines": [
+    {
+      "$oid": "6a2030c32eb76ea842da5259"
+    },
+    {
+      "$oid": "6a2030c42eb76ea842da525a"
+    }
+  ],
+  "total": 10.5,
+  "placeConsume": "TAKEAWAY",
+  "createdAt": {
+    "$date": "2026-06-03T13:46:59.083Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T13:48:52.490Z"
+  },
+  "__v": 2
+}]
