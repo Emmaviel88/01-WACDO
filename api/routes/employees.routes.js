@@ -36,15 +36,75 @@ const router = express.Router();
  *                 enum: ['ADMIN', 'RECEPTION', 'PREPARATION', 'DELIVERY', 'IDLE']
  *     responses:
  *       201:
- *        description: Création réussie, retourne un objet avec les données du nouvel employé créé (sans le mot de passe !)
+ *         description: Création réussie, retourne un objet avec les données du nouvel employé créé (sans afficher le mot de passe !)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Employé créé avec succès
+ *                 login:
+ *                   type: string
+ *                   example: jDupont
+ *                 password:
+ *                   type: string
+ *                   example: "**********"
+ *                 role:
+ *                   type: string
+ *                   enum: ['ADMIN', 'RECEPTION', 'PREPARATION', 'DELIVERY', 'IDLE']
+ *                   example: PREPARATION
  *       400:
- *        description: Requête invalide, l'employé existe déjà ou données manquantes
+ *         description: Requête invalide, login, mot de passe ou rôle manquant
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Veuillez fournir un login, un mot de passe et un rôle pour créer un employé
  *       401:
- *        description: Requête invalide, il n'y a pas de token dans l'entête de la requête ou le token n'est pas valide
+ *         description: Requête invalide, aucun utilisateur connecté ou token d'authentification manquant ou invalide
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: veuillez vous connecter avant de pouvoir créer un employé
  *       403:
- *        description: Accès refusé, l'utilisateur connecté n'est pas autorisé à créer un employé
+ *         description: Accès refusé à l'utilsateur actuellement connecté
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: l'utilisateur connecté n'est pas autorisé à créer un employé (réservé au rôle ADMIN)
+ *       409:
+ *         description: Requête invalide, l'employé existe déjà ou données manquantes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Cet employé existe déjà, création impossible !
  *       500:
- *        description: Erreur serveur
+ *         description: Erreur serveur
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Erreur serveur lors de la création de l'employé
  *
 */
 router.post('/', auth, createEmployee);
@@ -69,7 +129,7 @@ router.post('/', auth, createEmployee);
  *                 type: string
  *                 format: password
  *     responses:
- *       200:
+ *       201:
  *         description: Authentification réussie, retourne un token JWT
  *         content:
  *           application/json:
@@ -78,7 +138,7 @@ router.post('/', auth, createEmployee);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Authentification réussie
+ *                   example: Employé créé avec succès
  *                 token:
  *                   type: string
  *                   example: eyJhbGciOiJIUzI1NiIsInR...
@@ -123,9 +183,9 @@ router.post('/login', loginEmployee);
  *                 enum: ['ADMIN', 'RECEPTION', 'PREPARATION', 'DELIVERY', 'IDLE']
  *     responses:
  *       200:
- *        description: Modification réussie, retourne un objet avec les données de l'employé modifié
+ *         description: Modification réussie, retourne un objet avec les données de l'employé modifié
  *       500:
- *        description: Erreur serveur
+ *         description: Erreur serveur
  *
 */
 router.put('/edit/:id', auth, editEmployee);
@@ -146,9 +206,9 @@ router.put('/edit/:id', auth, editEmployee);
  *         description: ID de l'employé à supprimer
  *     responses:
  *       200:
- *        description: Suppression réussie
+ *         description: Suppression réussie
  *       500:
- *        description: Erreur serveur
+ *         description: Erreur serveur
  *
 */
 router.delete('/delete/:id', auth, deleteEmployee);
@@ -162,12 +222,12 @@ router.delete('/delete/:id', auth, deleteEmployee);
  *     tags: [Employees]
  *     responses:
  *       200:
- *        description: Récupération réussie, retourne un tableau d'objets avec les données des employés (sans les mots de passe !)
- *        content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
+ *         description: Récupération réussie, retourne un tableau d'objets avec les données des employés (sans les mots de passe !)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
  *                type: object
  *                properties:
  *                  _id:
@@ -177,7 +237,7 @@ router.delete('/delete/:id', auth, deleteEmployee);
  *                  role:
  *                    type: string
  *       500:
- *        description: Erreur serveur
+ *         description: Erreur serveur
  *
 */
 router.get('/list', listEmployees);

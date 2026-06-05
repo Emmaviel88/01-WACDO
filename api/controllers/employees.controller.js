@@ -9,72 +9,99 @@ exports.createEmployee = async (req, res) => {
     try {
 
         const connectedUser = req.user; // Récupère les informations de l'utilisateur connecté à partir du middleware d'authentification
-        console.log(`Utilisateur connecté dans CreateEmployee : ${connectedUser.id} - ${connectedUser.login} (${connectedUser.role})`);
+        if (!connectedUser) {
+            return res.status(401).json({ message: 'Requête invalide, veuillez vous connecter avant de pouvoir créer un employé' });
+        }
+        console.log(`employees.controller-L15 : Utilisateur connecté dans CreateEmployee : ${connectedUser.id} - ${connectedUser.login} (${connectedUser.role})`);
 
         // Vérifie que l'utilisateur connecté a le rôle d'administrateur
         if (connectedUser.role.toUpperCase() !== 'ADMIN') {
-            return res.status(403).json({ message: 'L15 : Accès refusé, vous n\'êtes pas autorisé à créer un employé' });
+            return res.status(403).json({ message: 'Accès refusé, vous n\'êtes pas autorisé à créer un employé' });
         }
-        // Récupère les données du corps de la requête
+        // Récupère (déserialize) les données du corps de la requête
         const { login, password, role } = req.body;
-        // Vérifie si l'employé à créer existe déjà
+
+        // Vérifie que le login, mot de passe et rôle sont présents
+        if (!login || !password || !role) {
+            return res.status(400).json({ message: 'Veuillez fournir un login, un mot de passe et un rôle pour créer un employé' });
+        }
+        // Vérifie si l'employé à créer existe déjà en BDD
         const existingEmployee = await Employee.findOne({ login });
         if (existingEmployee) {
-            return res.status(400).json({ message: 'Employé existe déjà, création impossible !' });
+            return res.status(409).json({ message: 'L\'employé existe déjà, création impossible !' });
         }
         
-        // Évolutions possibles : ajouter une validation plus poussée des données (complexité du mot de passe)   
+        // Évolutions ultérieures : Ajouter une validation plus poussée des données (complexité du mot de passe)   
         // Utiliser la lib password-validator
+        /*
+            Exemple d'utilisation de password-validator pour valider la complexité du mot de passe :
 
-        // Hash le mot de passe saisi
+            const PasswordValidator = require('password-validator');
+
+            const schema = new PasswordValidator();
+
+            schema
+            .is().min(8)          // au moins 8 caractères
+            .is().max(100)        // au plus 100 caractères
+            .has().uppercase()    // au moins une majuscule
+            .has().lowercase()    // au moins une minuscule
+            .has().digits(1)      // au moins un chiffre
+            .has().not().spaces();// ne contient pas d'espaces
+
+            console.log(schema.validate('Azerty123')); // resultat affiché => true
+            console.log(schema.validate('azerty'));    // resultat affiché => false
+        */
+
+        // Hash le mot de passe saisi pour ne pas l'envoyer en clair dans la BDD
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Instancie un nouvel employé avec les données fournies (le role par défaut est 'user')
+        // Instancie un nouvel employé avec les données fournies (le role par défaut est 'IDLE')
         const newEmployee = new Employee({
-            login,
-            password: hashedPassword,
-            role: role
+            login: login,               // La validité du login pourrait être améliorée ultérieurement (ex: regex pour n'autoriser que certains caractères)
+            password: hashedPassword,   // Le mot de passe est stocké sous forme de hash pour des raisons de sécurité
+            role: role.toUpperCase()    // Le rôle est stocké en majuscules pour uniformiser et faciliter les comparaisons ultérieures (ex: 'ADMIN', 'RECEPTION', 'PREPARATION', 'DELIVERY', 'IDLE')
         });
 
-        // Sauvegarde nouvel employé en BDD
+        // Sauvegarde le nouvel employé en BDD
         const savedEmployee = await newEmployee.save();
-        console.log(`Nouvel employé créé : ${savedEmployee.login} - avec le role : ${savedEmployee.role} et l'ID : ${savedEmployee._id} - Créé par : ${connectedUser.id} (${connectedUser.role})`);
+        console.log(`employees.controller-L64 : Nouvel employé créé : ${savedEmployee.login} - avec le role : ${savedEmployee.role} et l'ID : ${savedEmployee._id} - Créé par : ${connectedUser.id} (${connectedUser.role})`);
 
-        res.status(201).json({ savedEmployee });
+        res.status(201).json({ message: 'Employé créé avec succès', login: savedEmployee.login, password: '**********', role: savedEmployee.role });
     } catch (error) {
-        res.status(500).json({ message: 'L45 Erreur lors de la création de l\'employé', error });
+        res.status(500).json({ message: 'Erreur lors de la création de l\'employé', error });
     }
 };
 
+// Log-in in d'un employé
 exports.loginEmployee = async (req, res) => {
     try {
         const { login, password } = req.body;
         // Vérifie que le login et mot de passe sont présents
         if (!login || !password) {
-            return res.status(400).json({ message: 'Veuillez fournir un login et un mot de passe' });
+            return res.status(400).json({ message: 'employees.controller-L78 : Veuillez fournir un login et un mot de passe' });
         }
         // Cherche l'employé par son login dans la BDD
         const existingEmployee = await Employee.findOne({ login });
         if (!existingEmployee) {
-            return res.status(400).json({ message: 'Login ou mot de passe incorrect' });
+            return res.status(400).json({ message: 'employees.controller-L83 : Login ou mot de passe incorrect' });
         }
         const isPwdOk = await bcrypt.compare(password, existingEmployee.password);
         if (!isPwdOk) {
-            return res.status(400).json({ message: 'Login ou mot de passe incorrect' });
+            return res.status(400).json({ message: 'employees.controller-L87 : Login ou mot de passe incorrect' });
         }
-        // Génère un token JWT
+        // Génère un token JWT (qui sera utilisé pour authentifier les requêtes ultérieures de l'employé connecté) avec comme payload l'id, le login et le rôle de l'employé, et une durée de validité de 24h
         const token = jwt.sign({ id: existingEmployee._id, login: existingEmployee.login, role: existingEmployee.role.toUpperCase() }, process.env.JWT_SECRET, { expiresIn: '24h' });
-        // console.log("User : " + existingEmployee.login + " connecté avec succès, role : " + existingEmployee.role);
-        console.log(`User : ${existingEmployee.login.toUpperCase()} (${existingEmployee.role}) connecté avec succès !`);
-        console.log(`Token reçu dans login : ${token}`);
+        console.log(`employees.controller-L91 : L'employé ${existingEmployee.login.toUpperCase()} avec le rôle ${existingEmployee.role} est connecté avec succès !`);
+        console.log(`employees.controller-L92 : JWT généré : ${token}`);
         res.status(200).json({ message: 'Connexion réussie', token });
     } catch (error) {
         console.error(error);
 
-        res.status(500).json({ message: 'L74 Erreur lors de la connexion', error });
+        res.status(500).json({ message: 'Erreur lors de la connexion', error });
     }
 };
 
+// Modification d'un employé
 exports.editEmployee = async (req, res) => {
     try {
         const connectedUser = req.user;
@@ -97,7 +124,7 @@ exports.editEmployee = async (req, res) => {
         // Met à jour les données de l'employé
         existingEmployee.login = login;
         existingEmployee.password = hashedPassword;
-        //Le rôle ne peut être modifié que par un administrateur, sinon il reste inchangé
+        // Le rôle ne peut être modifié que par un administrateur, sinon il reste inchangé
         if (connectedUser.role.toUpperCase() == 'ADMIN') {
             existingEmployee.role = role.toUpperCase();
         }

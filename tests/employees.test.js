@@ -35,14 +35,14 @@ afterAll(async () => {
 });
 
 // Test d'une fonction simple d'addition de 2 nombres
-    // describe('Test d\'une fonction simple d\'addition avec JEST', () => {
-    //     it('Additionne deux nombres fournis en paramètres', async () => {
-    //         const result = testsAdd(2, 3);
-    //         console.log(`Le résultat de l'addition est : ${result}`);
-    //     expect(result).toBe(5);    
+describe('Test d\'une fonction simple d\'addition avec JEST', () => {
+    it('Additionne deux nombres fournis en paramètres', async () => {
+        const result = testsAdd(2, 3);
+        console.log(`Le résultat de l'addition est : ${result}`);
+    expect(result).toBe(5);    
 
-    //     })
-    // });
+    })
+});
 
 describe('POST /api/employees/', () => {
     it('Login de création d\'un employé', async () => {
